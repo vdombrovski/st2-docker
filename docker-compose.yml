@@ -2,7 +2,7 @@ version: '3'
 
 services:
   stackstorm:
-    image: stackstorm/stackstorm:${TAG:-latest}
+    image: __st2_docker_image__
     cap_add:
       - SYS_ADMIN
     security_opt:
@@ -22,6 +22,14 @@ services:
     volumes:
       - stackstorm-log-volume:/var/log
       - ./packs.dev:/opt/stackstorm/packs.dev
+      - ./os:/tmp/packs
+    links:
+      - keystone:keystone
+  keystone:
+    image: __keystone_image__
+    networks:
+      - private
+
 
 ### External Services
 
