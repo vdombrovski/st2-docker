@@ -11,9 +11,9 @@ function randpwd()
 }
 
 ST2_IMAGE=${ST2_IMAGE:-"stackstorm/stackstorm:latest"}
-sed -i "s/__st2_docker_image__/$ST2_IMAGE/g" docker-compose.yml
+sed -i "s@__st2_docker_image__@$ST2_IMAGE@g" docker-compose.yml
 KEYSTONE_IMAGE=${KEYSTONE_IMAGE:-"krystism/openstack-keystone"}
-sed -i "s/__keystone_image__/$KEYSTONE_IMAGE/g" docker-compose.yml
+sed -i "s@__keystone_image__@$KEYSTONE_IMAGE@g" docker-compose.yml
 
 mkdir -p ${CONF_DIR}
 
