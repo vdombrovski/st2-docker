@@ -13,10 +13,9 @@ function randpwd()
 ST2_IMAGE=${ST2_IMAGE:-"stackstorm/stackstorm:latest"}
 KEYSTONE_IMAGE=${KEYSTONE_IMAGE:-"krystism/openstack-keystone"}
 
-R_ST2="s@__st2_docker_image__@$ST2_IMAGE@g"
 R_KS="s@__keystone_image__@$KEYSTONE_IMAGE@g"
 
-sed -i $R_ST2 docker-compose.yml &> /dev/null || sed -i "" $R_ST2 docker-compose.yml
+sed "s@__st2_docker_image__@$ST2_IMAGE@g" docker-compose.yml.tpl > docker-compose.yml
 sed -i $R_KS docker-compose.yml &> /dev/null || sed -i "" $R_KS docker-compose.yml
 
 mkdir -p ${CONF_DIR}
