@@ -19,6 +19,7 @@ services:
     networks:
       - public
       - private
+      - ecosys
     volumes:
       - stackstorm-log-volume:/var/log
       - ./packs.dev:/opt/stackstorm/packs.dev

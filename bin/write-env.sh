@@ -10,13 +10,27 @@ function randpwd()
   echo $(openssl rand -base64 $1 | tr '/' 'A')
 }
 
+DCF=docker-compose.yml
+rm $DCF &> /dev/null || :
+
 ST2_IMAGE=${ST2_IMAGE:-"stackstorm/stackstorm:latest"}
 KEYSTONE_IMAGE=${KEYSTONE_IMAGE:-"krystism/openstack-keystone"}
 
 R_KS="s@__keystone_image__@$KEYSTONE_IMAGE@g"
+R_NW="s@__st2_network__@$ST2_NETWORK@g"
+R_NW_DELETE="/ecosys/d"
 
-sed "s@__st2_docker_image__@$ST2_IMAGE@g" docker-compose.yml.tpl > docker-compose.yml
-sed -i $R_KS docker-compose.yml &> /dev/null || sed -i "" $R_KS docker-compose.yml
+sed "s@__st2_docker_image__@$ST2_IMAGE@g" docker-compose.yml.tpl > $DCF
+sed -i $R_KS $DCF &> /dev/null || sed -i "" $R_KS $DCF
+
+if [[ $ST2_NETWORK ]]; then
+  echo "  ecosys:" >> $DCF
+  echo "    external:" >> $DCF
+  echo "      name: $ST2_NETWORK" >> $DCF
+  sed -i $R_NW $DCF &> /dev/null || sed -i "" $R_NW $DCF
+else
+  sed -i $R_NW_DELETE $DCF &> /dev/null || sed -i "" $R_NW_DELETE $DCF
+fi
 
 mkdir -p ${CONF_DIR}
 
